@@ -1,0 +1,22 @@
+body {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+#enterDetails {
+    float: left;
+    width: 50%;
+}
+
+#findDetails {
+    float: left;
+    width: 50%;
+}
+
+button {
+    text-transform: uppercase;
+}
+
+input {
+    width: 120px;
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firebase</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="enterDetails">
+      <h1>Enter Details</h1>
+      <h4>ID</h4>
+      <input type="text" id="enterID" />
+      <h4>Name</h4>
+      <input type="text" id="enterName" />
+      <h4>Age</h4>
+      <input type="number" id="enterAge" /> <br />
+      <br />
+
+      <button id="insert">insert</button>
+      <button id="update">update</button>
+      <button id="remove">remove</button>
+      <br />
+      <br />
+    </div>
+
+    <div id="findDetails">
+      <h1>Find by ID</h1>
+      <h4>ID</h4>
+      <input type="text" id="findID" /> <br />
+      <br />
+      <button id="find">find</button>
+      <h3 id="findName" type="text"></h3>
+      <h3 id="findAge" type="number"></h3>
+      <br />
+      <br />
+    </div>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBka-F7X5C4Vc986U7G-q3sO0Q08ga_Xps",
+        authDomain: "videodemo4-b287d.firebaseapp.com",
+        databaseURL: "https://videodemo4-b287d-default-rtdb.firebaseio.com",
+        projectId: "videodemo4-b287d",
+        storageBucket: "videodemo4-b287d.appspot.com",
+        messagingSenderId: "1089489992980",
+        appId: "1:1089489992980:web:86763892b6f8dbfa591601",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      import {
+        getDatabase,
+        set,
+        get,
+        update,
+        remove,
+        ref,
+        child,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+      const db = getDatabase();
+
+      let enterID = document.querySelector("#enterID");
+      let enterName = document.querySelector("#enterName");
+      let enterAge = document.querySelector("#enterAge");
+      let findID = document.querySelector("#findID");
+      let findName = document.querySelector("#findName");
+      let findAge = document.querySelector("#findAge");
+
+      let insertBtn = document.querySelector("#insert");
+      let updateBtn = document.querySelector("#update");
+      let removeBtn = document.querySelector("#remove");
+      let findBtn = document.querySelector("#find");
+
+      function InsertData() {
+        set(ref(db, "People/" + enterID.value), {
+          Name: enterName.value,
+          ID: enterID.value,
+          Age: enterAge.value,
+        })
+          .then(() => {
+            alert("Data added succesfully");
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+
+      function FindData() {
+        const dbref = ref(db);
+
+        get(child(dbref, "People/" + findID.value))
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              findName.innerHTML = "Name: " + snapshot.val().Name;
+              findAge.innerHTML = "Age: " + snapshot.val().Age;
+            } else {
+              alert("No data found");
+            }
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+
+      function UpdateData() {
+        update(ref(db, "People/" + enterID.value), {
+          Name: enterName.value,
+          Age: enterAge.value,
+        })
+          .then(() => {
+            alert("Data updated successfully");
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+
+      function RemoveData() {
+        remove(ref(db, "People/" + enterID.value))
+          .then(() => {
+            alert("Data deleted successfully");
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+
+      insertBtn.addEventListener("click", InsertData);
+      updateBtn.addEventListener("click", UpdateData);
+      removeBtn.addEventListener("click", RemoveData);
+      findBtn.addEventListener("click", FindData);
+    </script>
+  </body>
+</html>
